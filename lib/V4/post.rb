@@ -6,8 +6,6 @@ module VbulletinScraper
             attr_accessor :author
             attr_accessor :content
             attr_accessor :submit_date
-            
-            attr_accessor :topic
 
             def initialize
                 self.id = 0
@@ -15,8 +13,6 @@ module VbulletinScraper
                 self.author = ""
                 self.content = ""
                 self.submit_date = nil
-
-                self.topic = nil
             end
         end
     end

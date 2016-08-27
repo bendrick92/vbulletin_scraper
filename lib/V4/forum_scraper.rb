@@ -21,6 +21,8 @@ module VbulletinScraper
                 forum = VbulletinScraper::V4::Forum.new
 
                 if is_valid_vbulletin
+                    forum.is_vbulletin = is_valid_vbulletin
+                    forum.vbulletin_version = get_vbulletin_version
                     forum.title = get_forum_title
                     forum.url = get_forum_url
                 end
