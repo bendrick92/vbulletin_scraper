@@ -8,7 +8,7 @@ module VbulletinScraper
             attr_accessor :url
             attr_accessor :forum
             attr_accessor :topic
-            #attr_accessor :posts
+            attr_accessor :posts
 
             def initialize(url)
                 @url = url
@@ -19,10 +19,11 @@ module VbulletinScraper
                 topicScraper = VbulletinScraper::V4::TopicScraper.new(@url)
                 @topic = topicScraper.get_topic_object
 
-                #@posts = get_latest_posts
+                @posts = []
+                load_latest_posts
             end
 
-            def get_latest_posts(count = VbulletinScraper.configuration.post_count)
+            def load_latest_posts(count = VbulletinScraper.configuration.post_count)
                 stop = false
                 currPage = 9999
                 posts = []
@@ -53,7 +54,7 @@ module VbulletinScraper
 
                 posts.sort! { |a,b| b.submit_date <=> a.submit_date }
                 
-                return posts
+                @posts = posts
             end
         end
     end

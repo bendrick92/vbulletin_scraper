@@ -22,39 +22,45 @@ describe VbulletinScraper::V4::Scraper do
         end
     end
 
-    describe "#get_latest_posts" do
+    describe "#load_latest_posts" do
         context "using valid data" do
             context "multiple paged topic" do
                 context "given input of " + VbulletinScraper.configuration.post_count.to_s do
                     it "returns at least one post" do
-                        expect(scraper_multiple_paged_thread.get_latest_posts(VbulletinScraper.configuration.post_count)).to include(VbulletinScraper::V4::Post)
+                        scraper_multiple_paged_thread.load_latest_posts(VbulletinScraper.configuration.post_count)
+                        expect(scraper_multiple_paged_thread.posts).to include(VbulletinScraper::V4::Post)
                     end
                 end
                 context "given input greater than " + VbulletinScraper.configuration.post_count.to_s do
                     it "returns at least one post" do
-                        expect(scraper_multiple_paged_thread.get_latest_posts(VbulletinScraper.configuration.post_count + 1)).to include(VbulletinScraper::V4::Post)
+                        scraper_multiple_paged_thread.load_latest_posts(VbulletinScraper.configuration.post_count + 1)
+                        expect(scraper_multiple_paged_thread.posts).to include(VbulletinScraper::V4::Post)
                     end
                 end
                 context "given no input" do
                     it "returns at least one post" do
-                        expect(scraper_multiple_paged_thread.get_latest_posts).to include(VbulletinScraper::V4::Post)
+                        scraper_multiple_paged_thread.load_latest_posts
+                        expect(scraper_multiple_paged_thread.posts).to include(VbulletinScraper::V4::Post)
                     end
                 end
             end
             context "single paged topic" do
                 context "given input of " + VbulletinScraper.configuration.post_count.to_s do
                     it "returns at least one post" do
-                        expect(scraper_single_paged_thread.get_latest_posts(VbulletinScraper.configuration.post_count)).to include(VbulletinScraper::V4::Post)
+                        scraper_single_paged_thread.load_latest_posts(VbulletinScraper.configuration.post_count)
+                        expect(scraper_single_paged_thread.posts).to include(VbulletinScraper::V4::Post)
                     end
                 end
                 context "given input greater than " + VbulletinScraper.configuration.post_count.to_s do
                     it "returns at least one post" do
-                        expect(scraper_single_paged_thread.get_latest_posts(VbulletinScraper.configuration.post_count + 1)).to include(VbulletinScraper::V4::Post)
+                        scraper_single_paged_thread.load_latest_posts(VbulletinScraper.configuration.post_count + 1)
+                        expect(scraper_single_paged_thread.posts).to include(VbulletinScraper::V4::Post)
                     end
                 end
                 context "given no input" do
                     it "returns at least one post" do
-                        expect(scraper_single_paged_thread.get_latest_posts).to include(VbulletinScraper::V4::Post)
+                        scraper_single_paged_thread.load_latest_posts
+                        expect(scraper_single_paged_thread.posts).to include(VbulletinScraper::V4::Post)
                     end
                 end
             end
@@ -62,17 +68,20 @@ describe VbulletinScraper::V4::Scraper do
         context "using invalid data" do
             context "given input of " + VbulletinScraper.configuration.post_count.to_s do
                 it "returns empty array" do
-                    expect(scraper_invalid_input.get_latest_posts(VbulletinScraper.configuration.post_count)).to match_array([])
+                    scraper_invalid_input.load_latest_posts(VbulletinScraper.configuration.post_count)
+                    expect(scraper_invalid_input.posts).to match_array([])
                 end
             end
             context "given input greater than " + VbulletinScraper.configuration.post_count.to_s do
                 it "returns empty array" do
-                    expect(scraper_invalid_input.get_latest_posts(VbulletinScraper.configuration.post_count + 1)).to match_array([])
+                    scraper_invalid_input.load_latest_posts(VbulletinScraper.configuration.post_count + 1)
+                    expect(scraper_invalid_input.posts).to match_array([])
                 end
             end
             context "given no input" do
                 it "returns empty array" do
-                    expect(scraper_invalid_input.get_latest_posts).to match_array([])
+                    scraper_invalid_input.load_latest_posts
+                    expect(scraper_invalid_input.posts).to match_array([])
                 end
             end
         end
