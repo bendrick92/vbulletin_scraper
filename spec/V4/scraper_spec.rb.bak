@@ -1,0 +1,259 @@
+require_relative '../spec_helper'
+require_relative '../../lib/V4/scraper'
+require_relative '../../lib/V4/forum'
+require_relative '../../lib/V4/topic'
+require_relative '../../lib/V4/post'
+
+describe VbulletinScraper::V4::Scraper do
+    scraper_multiple_paged_thread = VbulletinScraper::V4::Scraper.new("http://www.focusst.org/forum/focus-st-news/50228-new-ford-fiesta-st-focus-st-development-under-way.html")
+    scraper_single_paged_thread = VbulletinScraper::V4::Scraper.new("http://www.focusst.org/forum/focus-st-news/49170-april-2016-focus-st-month-contest-winner-thunderlope.html")
+    scraper_invalid_input = VbulletinScraper::V4::Scraper.new("http://www.google.com")
+    scraper_post_html = VbulletinScraper::V4::Scraper.new("<div class='posthead'><span class='postdate old'><span class='date'>04-30-2016,&nbsp;<span class='time'>07:26 AM</span></span></span><span class='nodecontrols'><a name='post1085225' href='#' class='postcounter'>#1</a><a id='postcount1085225'' name='1'></a></span></div><div class='postdetails'><a class='username' href='#'><strong>ST2Focus</span>&nbsp;<img src='/img/smod.png'></strong></a></div><div class='postbody'><div class='content'><blockquote class='postcontent'>This is a test</blockquote></div></div>")
+    
+    describe "#initialize" do
+        context "given an input url" do
+            it "instantiates successfully" do
+                expect(scraper_single_paged_thread).to_not be_nil
+            end
+        end
+        context "given no input" do
+            it "throws an error" do
+                expect { VbulletinScraper::V4::Scraper.new() }.to raise_error(ArgumentError)
+            end
+        end
+    end
+
+    describe "#get_forum_object" do
+        context "given valid data" do
+            it "returns populated forum object" do
+                expect(scraper_single_paged_thread.get_forum_object).to be_instance_of(VbulletinScraper::V4::Forum)
+                expect(scraper_single_paged_thread.get_forum_object).to_not have_attributes(:title => "")
+                expect(scraper_single_paged_thread.get_forum_object).to_not have_attributes(:url => "")
+            end
+        end
+        context "given invalid data" do
+            it "returns empty forum object" do
+                expect(scraper_invalid_input.get_forum_object).to be_instance_of(VbulletinScraper::V4::Forum)
+                expect(scraper_invalid_input.get_forum_object).to have_attributes(:title => "")
+                expect(scraper_invalid_input.get_forum_object).to have_attributes(:url => "")
+            end
+        end
+    end
+
+    describe "#is_valid_vbulletin" do
+        context "given valid data" do
+            it "returns true" do
+                expect(scraper_single_paged_thread.is_valid_vbulletin).to be true
+            end
+        end
+        context "given invalid data" do
+            it "returns false" do
+                expect(scraper_invalid_input.is_valid_vbulletin).to be false
+            end
+        end
+    end
+
+    describe "#get_vbulletin_version" do
+        context "using valid data" do
+            it "returns forum version" do
+                expect(scraper_single_paged_thread.get_vbulletin_version).to eql("4.2.0")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_vbulletin_version).to eql("")
+            end
+        end
+    end
+
+    describe "#get_page_url" do
+        context "using valid data" do
+            it "returns page url" do
+                expect(scraper_single_paged_thread.get_page_url).to_not eql("")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_page_url).to eql("")
+            end
+        end
+    end
+
+    describe "#get_forum_title" do
+        context "using valid data" do
+            it "returns title of forum" do
+                expect(scraper_single_paged_thread.get_forum_title).to_not eql("")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_forum_title).to eql("")
+            end
+        end
+    end
+
+    describe "#get_current_page_number" do
+        context "using valid data" do
+            context "single page thread" do
+                it "returns 1" do
+                    expect(scraper_single_paged_thread.get_current_page_number).to eql(1)
+                end
+            end
+            context "multi page thread" do
+                it "returns page number >= 1" do
+                    expect(scraper_multiple_paged_thread.get_current_page_number).to be >= 1
+                end
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_current_page_number).to eql("")
+            end
+        end
+    end
+
+    describe "#get_total_page_count" do
+        context "using valid data" do
+            context "single page thread"do
+                it "returns 1" do
+                    expect(scraper_single_paged_thread.get_total_page_count).to eql(1)
+                end
+            end
+            context "multi page thread" do
+                it "returns page count > 1" do
+                    expect(scraper_multiple_paged_thread.get_total_page_count).to be > 1
+                end
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_total_page_count).to eql("")
+            end
+        end
+    end
+
+    describe "#get_vbulletin_topic_id" do
+        context "using valid data" do
+            it "returns vbulletin topic id" do
+                expect(scraper_single_paged_thread.get_vbulletin_topic_id).not_to eql("")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_vbulletin_topic_id).to eql("")
+            end
+        end
+    end
+
+    describe "#get_topic_url" do
+        context "using valid data" do
+            it "returns topic url" do
+                expect(scraper_single_paged_thread.get_topic_url).not_to eql("")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_topic_url).to eql("")
+            end
+        end
+    end
+
+    describe "#get_topic_title" do
+        context "using valid data" do
+            it "returns topic title" do
+                expect(scraper_single_paged_thread.get_topic_title).not_to eql("")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_topic_title).to eql("")
+            end
+        end
+    end
+
+    describe "#get_posts" do
+        context "using valid data" do
+            it "returns array of posts" do
+                expect(scraper_single_paged_thread.get_posts).not_to be_empty
+            end
+        end
+        context "using invalid data" do
+            it "returns empty array" do
+                expect(scraper_invalid_input.get_posts).to be_empty
+            end
+        end
+    end
+
+    describe "#get_latest_posts" do
+        context "using valid data" do
+            it "returns array of posts" do
+                expect(scraper_multiple_paged_thread.get_latest_posts).to be_nil
+            end
+        end
+    end
+
+    describe "#get_vbulletin_post_id" do
+        context "using valid data" do
+            it "returns vbulletin-specific id" do
+                expect(scraper_post_html.get_vbulletin_post_id).not_to eql("")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_vbulletin_post_id).to eql("")
+            end
+        end
+    end
+
+    describe "#get_post_author" do
+        context "using valid data" do
+            it "returns post author" do
+                expect(scraper_post_html.get_post_author).not_to eql("")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_post_author).to eql("")
+            end
+        end
+    end
+
+    describe "#get_post_content_raw" do
+        context "using valid data" do
+            it "returns post content" do
+                expect(scraper_post_html.get_post_content_raw).not_to eql("")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_post_content_raw).to eql("")
+            end
+        end
+    end
+
+    describe "#get_post_content" do
+        context "using valid data" do
+            it "returns post content" do
+                expect(scraper_post_html.get_post_content).not_to eql("")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(scraper_invalid_input.get_post_content).to eql("")
+            end
+        end
+    end
+
+    describe "#get_post_submit_datetime" do
+        context "using valid data" do
+            it "returns post datetime" do
+                expect(scraper_post_html.get_post_submit_datetime).not_to be_nil
+            end
+        end
+        context "using invalid data" do
+            it "returns nil" do
+                expect(scraper_invalid_input.get_post_submit_datetime).to be_nil
+            end
+        end
+    end
+end
