@@ -25,11 +25,11 @@ module VbulletinScraper
 
             def load_latest_posts(count = VbulletinScraper.configuration.post_count)
                 stop = false
-                currPage = 9999
+                currPageNumber = 9999
                 posts = []
 
                 until stop do
-                    currPageUrl = @url + '?page=' + currPage.to_s
+                    currPageUrl = @url + '?page=' + currPageNumber.to_s
                     currPageScraper = VbulletinScraper::V4::TopicScraper.new(currPageUrl)
                     currPagePosts = currPageScraper.get_posts
 
