@@ -1,5 +1,6 @@
 require_relative 'vbulletin_scraper/version'
 require_relative 'configuration'
+require_relative 'V4/scraper'
 
 module VbulletinScraper
     class << self
