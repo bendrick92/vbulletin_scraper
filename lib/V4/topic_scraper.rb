@@ -1,7 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
 require 'open_uri_redirections'
-require_relative 'topic'
 
 module VbulletinScraper
     module V4
@@ -15,17 +14,6 @@ module VbulletinScraper
                     @data = Nokogiri::HTML(input)
                     @data.encoding = "UTF-8"
                 end
-            end
-
-            def get_topic_object
-                topic = VbulletinScraper::V4::Topic.new
-
-                if is_valid_vbulletin
-                    topic.title = get_topic_title
-                    topic.url = get_topic_url
-                end
-
-                return topic
             end
 
             def is_valid_vbulletin

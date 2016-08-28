@@ -1,6 +1,5 @@
 require_relative '../spec_helper'
 require_relative '../../lib/V4/topic_scraper'
-require_relative '../../lib/V4/topic'
 
 describe VbulletinScraper::V4::TopicScraper do
     topic_scraper_multiple_paged_thread = VbulletinScraper::V4::TopicScraper.new("http://www.focusst.org/forum/focus-st-news/50228-new-ford-fiesta-st-focus-st-development-under-way.html")
@@ -19,24 +18,7 @@ describe VbulletinScraper::V4::TopicScraper do
             end
         end
     end
-
-    describe "#get_topic_object" do
-        context "given valid data" do
-            it "returns populated forum object" do
-                expect(topic_scraper_single_paged_thread.get_topic_object).to be_instance_of(VbulletinScraper::V4::Topic)
-                expect(topic_scraper_single_paged_thread.get_topic_object).to_not have_attributes(:title => "")
-                expect(topic_scraper_single_paged_thread.get_topic_object).to_not have_attributes(:url => "")
-            end
-        end
-        context "given invalid data" do
-            it "returns empty forum object" do
-                expect(topic_scraper_invalid_input.get_topic_object).to be_instance_of(VbulletinScraper::V4::Topic)
-                expect(topic_scraper_invalid_input.get_topic_object).to have_attributes(:title => "")
-                expect(topic_scraper_invalid_input.get_topic_object).to have_attributes(:url => "")
-            end
-        end
-    end
-
+    
     describe "#is_valid_vbulletin" do
         context "given valid data" do
             it "returns true" do

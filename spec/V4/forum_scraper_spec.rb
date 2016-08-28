@@ -1,6 +1,5 @@
 require_relative '../spec_helper'
 require_relative '../../lib/V4/forum_scraper'
-require_relative '../../lib/V4/forum'
 
 describe VbulletinScraper::V4::ForumScraper do
     forum_scraper_multiple_paged_thread = VbulletinScraper::V4::ForumScraper.new("http://www.focusst.org/forum/focus-st-news/50228-new-ford-fiesta-st-focus-st-development-under-way.html")
@@ -16,23 +15,6 @@ describe VbulletinScraper::V4::ForumScraper do
         context "given no input" do
             it "throws an error" do
                 expect { VbulletinScraper::V4::ForumScraper.new() }.to raise_error(ArgumentError)
-            end
-        end
-    end
-
-    describe "#get_forum_object" do
-        context "given valid data" do
-            it "returns populated forum object" do
-                expect(forum_scraper_single_paged_thread.get_forum_object).to be_instance_of(VbulletinScraper::V4::Forum)
-                expect(forum_scraper_single_paged_thread.get_forum_object).to_not have_attributes(:title => "")
-                expect(forum_scraper_single_paged_thread.get_forum_object).to_not have_attributes(:url => "")
-            end
-        end
-        context "given invalid data" do
-            it "returns empty forum object" do
-                expect(forum_scraper_invalid_input.get_forum_object).to be_instance_of(VbulletinScraper::V4::Forum)
-                expect(forum_scraper_invalid_input.get_forum_object).to have_attributes(:title => "")
-                expect(forum_scraper_invalid_input.get_forum_object).to have_attributes(:url => "")
             end
         end
     end

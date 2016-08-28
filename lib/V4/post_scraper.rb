@@ -1,7 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
 require 'open_uri_redirections'
-require_relative 'post'
 
 module VbulletinScraper
     module V4
@@ -15,19 +14,6 @@ module VbulletinScraper
                     @data = Nokogiri::HTML(input)
                     @data.encoding = "UTF-8"
                 end
-            end
-
-            def get_post_object
-                post = Post.new
-
-                if @data != nil
-                    post.vbulletin_post_id = get_vbulletin_post_id
-                    post.author = get_post_author
-                    post.content = get_post_content
-                    post.submit_date = get_post_submit_datetime
-                end
-
-                return post
             end
                 
             def get_vbulletin_post_id
