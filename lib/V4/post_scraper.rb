@@ -41,10 +41,9 @@ module VbulletinScraper
             end
                 
             def get_post_content
-                postContent = get_item_by_selector('.content blockquote')
+                postContent = get_items_by_selector('.content blockquote > text()')
                 if postContent != nil
-                    postContent = postContent.children.remove
-                    return get_raw_text(postContent.text)
+                    return get_raw_text(postContent.to_s)
                 end
                 return ''
             end
@@ -110,7 +109,7 @@ module VbulletinScraper
                 
             def get_raw_text(input)
                 if input != nil
-                    return input.strip.gsub(/\u00a0/, ' ')
+                    return input.strip.gsub(/\u00a0/, ' ').gsub('\t', '')
                 else
                     return nil
                 end
