@@ -43,6 +43,7 @@ module VbulletinScraper
             def get_post_content
                 postContent = get_item_by_selector('.content blockquote')
                 if postContent != nil
+                    postContent = postContent.children.remove
                     return get_raw_text(postContent.text)
                 end
                 return ''
@@ -70,6 +71,15 @@ module VbulletinScraper
                     return submitDateTime
                 end
                 return nil
+            end
+
+            def get_quotes
+                quotes = get_items_by_selector('.bbcode_container')
+                if quotes != nil
+                    return get_items_by_selector('.bbcode_container')
+                else
+                    return []
+                end
             end
                 
             def get_item_by_selector(selector)
