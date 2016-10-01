@@ -80,6 +80,14 @@ module VbulletinScraper
                     return []
                 end
             end
+
+            def get_post_permalink
+                permalink = get_item_by_selector_with_attribute('.postcounter', 'href')
+                if permalink != nil
+                    return get_raw_text(permalink)
+                end
+                return ''
+            end
                 
             def get_item_by_selector(selector)
                 if @data != nil

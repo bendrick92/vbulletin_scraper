@@ -101,4 +101,17 @@ describe VbulletinScraper::V4::PostScraper do
             end
         end
     end
+
+    describe "#get_post_permalink" do
+        context "using valid data" do
+            it "returns post permalink" do
+                expect(post_scraper_post_html.get_post_permalink).not_to eql("")
+            end
+        end
+        context "using invalid data" do
+            it "returns empty string" do
+                expect(post_scraper_invalid_input.get_post_permalink).to eql("")
+            end
+        end
+    end
 end
