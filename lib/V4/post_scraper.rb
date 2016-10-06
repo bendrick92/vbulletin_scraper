@@ -41,9 +41,11 @@ module VbulletinScraper
             end
                 
             def get_post_content
-                postContent = get_items_by_selector('.content blockquote > text()')
+                postContent = get_items_by_selector('.content blockquote')
                 if postContent != nil
-                    return get_raw_text(postContent.to_s)
+                    postContentNoQuotes = Nokogiri::HTML.fragment(postContent.inner_html)
+                    postContentNoQuotes.search('div').remove
+                    return postContentNoQuotes.to_s
                 end
                 return ''
             end

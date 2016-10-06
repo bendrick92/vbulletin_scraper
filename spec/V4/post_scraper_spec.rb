@@ -3,7 +3,7 @@ require_relative '../../lib/V4/post_scraper'
 
 describe VbulletinScraper::V4::PostScraper do
     post_scraper_post_html = VbulletinScraper::V4::PostScraper.new("<div class='posthead'><span class='postdate old'><span class='date'>04-30-2016,&nbsp;<span class='time'>07:26 AM</span></span></span><span class='nodecontrols'><a name='post1085225' href='#' class='postcounter'>#1</a><a id='postcount1085225'' name='1'></a></span></div><div class='postdetails'><a class='username' href='#'><strong>ST2Focus</span>&nbsp;<img src='/img/smod.png'></strong></a></div><div class='postbody'><div class='content'><blockquote class='postcontent'>This is a test</blockquote></div></div>")
-    post_scraper_post_html_with_quotes = VbulletinScraper::V4::PostScraper.new("<div class='posthead'><span class='postdate old'><span class='date'>04-30-2016,&nbsp;<span class='time'>07:26 AM</span></span></span><span class='nodecontrols'><a name='post1085225' href='#' class='postcounter'>#1</a><a id='postcount1085225'' name='1'></a></span></div><div class='postdetails'><a class='username' href='#'><strong>ST2Focus</span>&nbsp;<img src='/img/smod.png'></strong></a></div><div class='postbody'><div class='content'><blockquote class='postcontent'><div class='bbcode_container'><div class='bbcode_postedby'>Originally Posted by <strong>Ben</strong><a href='http://www.google.com'>..</a></div><div class='message'>This is a test</div></div></blockquote></div></div>")
+    post_scraper_post_html_with_quotes = VbulletinScraper::V4::PostScraper.new("<div class='posthead'><span class='postdate old'><span class='date'>04-30-2016,&nbsp;<span class='time'>07:26 AM</span></span></span><span class='nodecontrols'><a name='post1085225' href='#' class='postcounter'>#1</a><a id='postcount1085225'' name='1'></a></span></div><div class='postdetails'><a class='username' href='#'><strong>ST2Focus</span>&nbsp;<img src='/img/smod.png'></strong></a></div><div class='postbody'><div class='content'><blockquote class='postcontent'><div class='bbcode_container'><div class='bbcode_postedby'>Originally Posted by <strong>Ben</strong><a href='http://www.google.com'>..</a></div><div class='message'>This is a test</div></div>This is a test with a <a href='#'>link</a> too!</blockquote></div></div>")
     post_scraper_invalid_input = VbulletinScraper::V4::PostScraper.new("<div class='test'></div>")
 
     describe "#initialize" do
@@ -62,6 +62,11 @@ describe VbulletinScraper::V4::PostScraper do
         context "using valid data" do
             it "returns post content" do
                 expect(post_scraper_post_html.get_post_content).not_to eql("")
+            end
+        end
+        context "using valid data with quotes" do
+            it "returns post content without quotes" do
+                expect(post_scraper_post_html_with_quotes.get_post_content).to eql("This is a test with a <a href=\"#\">link</a> too!")
             end
         end
         context "using invalid data" do
