@@ -1,7 +1,7 @@
 require 'bundler/setup'
 Bundler.setup
 
-require 'vbulletin_scraper'
+require_relative '../lib/vbulletin_scraper'
 
 RSpec.configure do |config|
 
