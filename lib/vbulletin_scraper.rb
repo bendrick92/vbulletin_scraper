@@ -1,9 +1,9 @@
 require_relative 'vbulletin_scraper/version'
-require_relative 'configuration'
-require_relative 'V4/forum_scraper'
-require_relative 'V4/topic_scraper'
-require_relative 'V4/post_scraper'
-require_relative 'V4/quote_scraper'
+require_relative 'vbulletin_scraper/configuration'
+require_relative 'vbulletin_scraper/V4/forum_scraper'
+require_relative 'vbulletin_scraper/V4/topic_scraper'
+require_relative 'vbulletin_scraper/V4/post_scraper'
+require_relative 'vbulletin_scraper/V4/quote_scraper'
 
 module VbulletinScraper
     class << self

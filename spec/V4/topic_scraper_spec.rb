@@ -1,5 +1,4 @@
 require_relative '../spec_helper'
-require_relative '../../lib/V4/topic_scraper'
 
 describe VbulletinScraper::V4::TopicScraper do
     topic_scraper_multiple_paged_thread = VbulletinScraper::V4::TopicScraper.new("http://www.focusst.org/forum/focus-st-news/50228-new-ford-fiesta-st-focus-st-development-under-way.html")

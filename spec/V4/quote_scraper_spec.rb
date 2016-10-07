@@ -1,5 +1,4 @@
 require_relative '../spec_helper'
-require_relative '../../lib/V4/quote_scraper'
 
 describe VbulletinScraper::V4::QuoteScraper do
     quote_scraper_quote_html = VbulletinScraper::V4::QuoteScraper.new("<div class='bbcode_container'><div class='bbcode_postedby'>Originally Posted by <strong>Ben</strong><a href='http://www.google.com'>..</a></div><div class='message'>This is a test</div></div>")

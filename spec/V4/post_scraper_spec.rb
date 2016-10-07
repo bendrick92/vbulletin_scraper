@@ -1,5 +1,4 @@
 require_relative '../spec_helper'
-require_relative '../../lib/V4/post_scraper'
 
 describe VbulletinScraper::V4::PostScraper do
     post_scraper_post_html = VbulletinScraper::V4::PostScraper.new("<div class='posthead'><span class='postdate old'><span class='date'>04-30-2016,&nbsp;<span class='time'>07:26 AM</span></span></span><span class='nodecontrols'><a name='post1085225' href='#' class='postcounter'>#1</a><a id='postcount1085225'' name='1'></a></span></div><div class='postdetails'><a class='username' href='#'><strong>ST2Focus</span>&nbsp;<img src='/img/smod.png'></strong></a></div><div class='postbody'><div class='content'><blockquote class='postcontent'>This is a test</blockquote></div></div>")
