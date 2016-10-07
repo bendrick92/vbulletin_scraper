@@ -1,21 +1,8 @@
-require 'nokogiri'
-require 'open-uri'
-require 'open_uri_redirections'
+require_relative 'scraper'
 
 module VbulletinScraper
     module V4
-        class QuoteScraper
-            def initialize(input)
-                @data = nil
-                if input.start_with? "http" || "www"
-                    @data = Nokogiri::HTML(open(input, :allow_redirections => :all))
-                    @data.encoding = "UTF-8"
-                else
-                    @data = Nokogiri::HTML(input)
-                    @data.encoding = "UTF-8"
-                end
-            end
-
+        class QuoteScraper < Scraper
             def get_quote_author
                 quoteAuthor = get_item_by_selector('.bbcode_postedby strong')
                 if quoteAuthor != nil
@@ -30,32 +17,6 @@ module VbulletinScraper
                     return get_raw_text(quoteContent.text)
                 end
                 return ''
-            end
-
-            def get_item_by_selector(selector)
-                if @data != nil
-                    if @data.at_css(selector)
-                        return @data.at_css(selector)
-                    end
-                end
-                return nil
-            end
-
-            def get_item_by_selector_with_attribute(selector, attribute)
-                if @data != nil
-                    if @data.at_css(selector)
-                        return @data.at_css(selector)[attribute]
-                    end
-                end
-                return nil
-            end
-                
-            def get_raw_text(input)
-                if input != nil
-                    return input.strip.gsub(/\u00a0/, ' ')
-                else
-                    return nil
-                end
             end
         end
     end
