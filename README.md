@@ -22,7 +22,38 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+At the top of your Ruby file:
+
+    require 'vbulletin_scraper'
+    
+Example usage:
+
+    forumScraper = VbulletinScraper::V4::ForumScraper.new('http://someforum.com')
+    isVbulletinForum = forumScraper.is_valid_vbulletin
+    vbulletinVersion = forumScraper.get_vbulletin_version
+    forumTitle = forumScraper.get_forum_title
+    forumUrl = forumScraper.get_forum_url
+    
+    topicScraper = VbulletinScraper::V4::TopicScraper.new('http://someforum.com/forum/some-thread-section/1234-a-sample-thread')
+    topicTitle = topicScraper.get_topic_title
+    topicUrl = topicScraper.get_topic_url
+    posts = topicScraper.get_posts
+    
+    posts.each do |post|
+        postScraper = VbulletinScraper::V4::PostScraper.new(post.to_s)
+        vbulletinPostId = postScraper.get_vbulletin_post_id
+        postAuthor = postScraper.get_post_author
+        postContent = postScraper.get_post_content
+        postSubmitDate = postScraper.get_post_submit_datetime
+        postPermalink = postScraper.get_post_permalink
+        quotes = postScraper.get_quotes
+        
+        quotes.each do |quote|
+            quoteScraper = VbulletinScraper::V4::QuoteScraper.new(quote.to_s)
+            quoteAuthor = quoteScraper.get_quote_author
+            quoteContent = quoteScraper.get_quote_content
+        end
+    end
 
 ## Development
 
