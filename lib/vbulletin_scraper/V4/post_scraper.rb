@@ -43,7 +43,8 @@ module VbulletinScraper
                 if postContent != nil
                     postContentNoQuotes = Nokogiri::HTML.fragment(postContent.inner_html)
                     postContentNoQuotes.search('div').remove
-                    return postContentNoQuotes.to_s
+                    postContentNoQuotes.search('comment()').remove
+                    return get_raw_text(postContentNoQuotes.to_s)
                 end
                 return ''
             end
