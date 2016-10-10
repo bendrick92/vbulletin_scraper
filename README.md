@@ -1,8 +1,6 @@
 # VbulletinScraper
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/vbulletin_scraper`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+VbulletinScraper is a Ruby gem designed to parse compatible vBulletin forums, threads, and posts.  Currently only vBulletin forums v4.x are supported.
 
 ## Installation
 
@@ -19,6 +17,43 @@ And then execute:
 Or install it yourself as:
 
     $ gem install vbulletin_scraper
+
+
+## Available Functions
+
+### Forums
+
+    is_valid_vbulletin
+    get_vbulletin_version
+    get_forum_url
+    get_forum_title
+    
+### Threads (Topics)
+
+    is_valid_vbulletin
+    get_vbulletin_version
+    get_current_page_number
+    get_total_page_count
+    get_vbulletin_topic_id
+    get_topic_url
+    get_topic_title
+    get_posts
+    
+### Posts
+
+    get_vbulletin_post_id
+    get_post_author
+    get_post_content_raw
+    get_post_content
+    get_post_submit_datetime
+    get_quotes
+    get_post_permalink
+
+### Quotes
+
+    get_quote_author
+    get_quote_content
+
 
 ## Usage
 
@@ -55,15 +90,46 @@ Example usage:
         end
     end
 
-## Development
+To grab multiple pages of posts (starting with latest):
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+    url = 'http://someforum.com/forum/some-thread-section/1234-a-sample-thread'
+    currPage = 9999
+    postCounter = 0
+    maxPosts = 10
+    stop = false
+    
+    until stop do
+        currPageUrl = url + '?page=' + currPage.to_s
+        currPageScraper = VbulletinScraper::V4::TopicScraper.new(currPageUrl)
+        currPagePosts = currPageScraper.get_posts
+        
+        currPagePosts.each do |post|
+            postScraper = VbulletinScraper::V4::PostScraper.new(post.to_s)    
+            
+            # etc...
+            
+            postCounter += 1
+            
+            if postCounter >= maxPosts
+                stop = true
+            end
+        end
+        
+        if currPage > 1
+            currPage -= 1
+        else
+            stop = true
+        end
+    end
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/vbulletin_scraper. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+1. Fork it ( https://github.com/bendrick92/vbulletin_scraper/fork )
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create a new Pull Request
 
 
 ## License
