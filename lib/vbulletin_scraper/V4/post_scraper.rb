@@ -57,16 +57,20 @@ module VbulletinScraper
                 rawDateTimeString = get_item_by_selector('.date')
                 if rawDateTimeString != nil
                     rawDateTimeString = get_raw_text(rawDateTimeString.text)
-                    if rawDateTimeString.include? 'Yesterday'
-                        rawDateTimeString = rawDateTimeString.gsub('Yesterday', '')
-                        formattedDateTimeString = Date.yesterday.strftime(dateFormat) + rawDateTimeString
-                        submitDateTime = DateTime.strptime(formattedDateTimeString, dateTimeFormat)
-                    elsif rawDateTimeString.include? 'Today'
-                        rawDateTimeString = rawDateTimeString.gsub('Today', '')
-                        formattedDateTimeString = Date.today.strftime(dateFormat) + rawDateTimeString
-                        submitDateTime = DateTime.strptime(formattedDateTimeString, dateTimeFormat)
-                    else
-                        submitDateTime = DateTime.strptime(rawDateTimeString, dateTimeFormat)
+                    begin
+                        if rawDateTimeString.include? 'Yesterday'
+                            rawDateTimeString = rawDateTimeString.gsub('Yesterday', '')
+                            formattedDateTimeString = Date.yesterday.strftime(dateFormat) + rawDateTimeString
+                            submitDateTime = DateTime.strptime(formattedDateTimeString, dateTimeFormat)
+                        elsif rawDateTimeString.include? 'Today'
+                            rawDateTimeString = rawDateTimeString.gsub('Today', '')
+                            formattedDateTimeString = Date.today.strftime(dateFormat) + rawDateTimeString
+                            submitDateTime = DateTime.strptime(formattedDateTimeString, dateTimeFormat)
+                        else
+                            submitDateTime = DateTime.strptime(rawDateTimeString, dateTimeFormat)
+                        end
+                    rescue ArgumentError
+                        submitDateTime = nil
                     end
                     return submitDateTime
                 end
